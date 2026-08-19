@@ -1,13 +1,87 @@
 {
-    "atomType": "Molecule",
-    "x": 0,
-    "y": 0,
-    "uniqueID": "id-38",
-    "name": "select.Either",
-    "topLevel": true,
-    "allAtoms": [],
-    "allConnectors": [],
-    "unitsKey": "Unitless",
-    "fileTypeVersion": 1,
-    "filetypeVersion": 1
+  "atomType": "Molecule",
+  "x": 0,
+  "y": 0,
+  "uniqueID": "id-38",
+  "name": "select.Either",
+  "ioValues": [
+    {
+      "name": "selectionOne",
+      "ioValue": "__GEOMETRY_INPUT__"
+    },
+    {
+      "name": "selectionTwo",
+      "ioValue": "__GEOMETRY_INPUT__"
+    }
+  ],
+  "topLevel": true,
+  "allAtoms": [
+    {
+      "atomType": "Output",
+      "x": 0.98,
+      "y": 0.5,
+      "uniqueID": "id-39",
+      "ioValues": [
+        {
+          "name": "number or geometry",
+          "ioValue": "__GEOMETRY_INPUT__"
+        }
+      ]
+    },
+    {
+      "atomType": "Code",
+      "x": 0.4173177083333333,
+      "y": 0.5885714285714286,
+      "uniqueID": "id-41",
+      "ioValues": [
+        {
+          "name": "a1",
+          "ioValue": "__GEOMETRY_INPUT__"
+        },
+        {
+          "name": "a2",
+          "ioValue": "__GEOMETRY_INPUT__"
+        }
+      ],
+      "interpreterVersion": 1,
+      "code": "// select.adjascentFaces\nfunction run(a1: Assembly, a2: Assembly) {\n  const a2leafs: Assembly<LeafGeom>[] = []\n  a2.onLeafs((leaf) => {\n    a2leafs.push(leaf)\n    return leaf;\n  })\n  let index = 0;\n  return a1.onLeafs((leaf) => {\n    if (index > a2leafs.length - 1) {\n      throw new Error(\"Input asesmblies had different number of leafs\")\n    }\n    const otherSel = a2leafs[index].selection;\n    index++;\n\n    const thisSel = leaf.selection;\n    if (thisSel == undefined || otherSel == undefined) {\n      leaf.selection = { edges: [], faces: [], part: false }\n      return leaf;\n    }\n    const newSel = {\n      edges: [...new Set([...(thisSel.edges ?? []), ...(otherSel.edges ?? [])])],\n      faces: [...new Set([...(thisSel.faces ?? []), ...(otherSel.faces ?? [])])],\n      part: thisSel.part || otherSel.part\n    }\n    console.log(otherSel)\n    console.log(thisSel)\n    console.log(newSel)\n    leaf.selection = newSel;\n    return leaf;\n  })\n}",
+      "compiledCode": "\"use strict\";\n// select.adjascentFaces\nfunction run(a1, a2) {\n    const a2leafs = [];\n    a2.onLeafs((leaf) => {\n        a2leafs.push(leaf);\n        return leaf;\n    });\n    let index = 0;\n    return a1.onLeafs((leaf) => {\n        if (index > a2leafs.length - 1) {\n            throw new Error(\"Input asesmblies had different number of leafs\");\n        }\n        const otherSel = a2leafs[index].selection;\n        index++;\n        const thisSel = leaf.selection;\n        if (thisSel == undefined || otherSel == undefined) {\n            leaf.selection = { edges: [], faces: [], part: false };\n            return leaf;\n        }\n        const newSel = {\n            edges: [...new Set([...(thisSel.edges ?? []), ...(otherSel.edges ?? [])])],\n            faces: [...new Set([...(thisSel.faces ?? []), ...(otherSel.faces ?? [])])],\n            part: thisSel.part || otherSel.part\n        };\n        console.log(otherSel);\n        console.log(thisSel);\n        console.log(newSel);\n        leaf.selection = newSel;\n        return leaf;\n    });\n}\n"
+    },
+    {
+      "atomType": "Input",
+      "x": 0.0231,
+      "y": 0.3057142857142857,
+      "uniqueID": "id-52",
+      "name": "selectionOne",
+      "type": "geometry"
+    },
+    {
+      "atomType": "Input",
+      "x": 0.0231,
+      "y": 0.5428571428571428,
+      "uniqueID": "id-55",
+      "name": "selectionTwo",
+      "type": "geometry"
+    }
+  ],
+  "allConnectors": [
+    {
+      "ap2Name": "number or geometry",
+      "ap1ID": "id-41",
+      "ap2ID": "id-39"
+    },
+    {
+      "ap2Name": "a1",
+      "ap1ID": "id-52",
+      "ap2ID": "id-41"
+    },
+    {
+      "ap2Name": "a2",
+      "ap1ID": "id-55",
+      "ap2ID": "id-41"
+    }
+  ],
+  "unitsKey": "Unitless",
+  "fileTypeVersion": 1,
+  "filetypeVersion": 1
 }
