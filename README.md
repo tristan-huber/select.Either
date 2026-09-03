@@ -2,7 +2,7 @@
 
 # select.Either
 
-![](/project.svg)
+![](/project.png)
 
 ## Inputs
 
